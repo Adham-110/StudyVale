@@ -1,0 +1,341 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Recommendation
+{% endblock %}
+
+{% block main %}
+
+<style>
+    .recommendation-page {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .recommendation-header {
+        margin-bottom: 30px;
+    }
+
+    .recommendation-eyebrow {
+        margin: 0 0 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .recommendation-header h1 {
+        margin: 0;
+        font-size: 42px;
+        line-height: 1.1;
+        color: var(--text);
+    }
+
+    .recommendation-header p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+    }
+
+    .recommendation-card {
+        padding: 26px;
+        margin-bottom: 32px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .recommendation-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .recommendation-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: #f1f3f5;
+        color: var(--accent);
+        font-size: 20px;
+    }
+
+    .recommendation-card h2 {
+        margin: 0;
+        font-size: 20px;
+        color: var(--text);
+    }
+
+    .recommendation-text {
+        padding: 18px 20px;
+        border-radius: 12px;
+        background: #f8f9fa;
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .study-section {
+        margin-top: 10px;
+    }
+
+    .study-section-header {
+        margin-bottom: 16px;
+    }
+
+    .study-section-header h2 {
+        margin: 0;
+        font-size: 21px;
+        color: var(--text);
+    }
+
+    .study-section-header p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .subtopic-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .subtopic-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 18px 20px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .subtopic-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .subtopic-info {
+        min-width: 0;
+    }
+
+    .subtopic-subject {
+        margin: 0 0 5px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .subtopic-path {
+        margin: 0;
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .subtopic-status {
+        flex-shrink: 0;
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .quiz-score {
+        flex-shrink: 0;
+        min-width: 76px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: #f8f9fa;
+        text-align: center;
+    }
+
+    .quiz-score-label {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .quiz-score-value {
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .subtopic-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 700px) {
+        .recommendation-header h1 {
+            font-size: 34px;
+        }
+
+        .recommendation-card {
+            padding: 20px;
+        }
+
+        .subtopic-card {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .subtopic-meta {
+            width: 100%;
+        }
+
+        .subtopic-status,
+        .quiz-score {
+            flex: 1;
+        }
+
+        .quiz-score {
+            min-width: 0;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .recommendation-card {
+            padding: 16px;
+        }
+
+        .recommendation-card-header {
+            align-items: flex-start;
+        }
+
+        .recommendation-text {
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .subtopic-card {
+            padding: 16px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .subtopic-card {
+            transition: none;
+        }
+
+        .subtopic-card:hover {
+            transform: none;
+        }
+    }
+</style>
+
+<main class="recommendation-page">
+
+    <header class="recommendation-header">
+        <p class="recommendation-eyebrow">SMART STUDY PLAN</p>
+
+        <h1>Study Recommendation</h1>
+
+        <p>
+            A personalized suggestion based on your current study progress.
+        </p>
+    </header>
+
+    <section class="recommendation-card" aria-labelledby="recommendation-title">
+
+        <div class="recommendation-card-header">
+
+            <div class="recommendation-icon" aria-hidden="true">
+                ✦
+            </div>
+
+            <h2 id="recommendation-title">
+                What should I study today?
+            </h2>
+
+        </div>
+
+        <div class="recommendation-text">
+            {{ recommendation | replace("**", "") | replace("\n", "<br>") | safe }}
+        </div>
+
+    </section>
+
+    <section class="study-section" aria-labelledby="study-progress-title">
+
+        <header class="study-section-header">
+            <h2 id="study-progress-title">Your Study Progress</h2>
+
+            <p>
+                Here's how your current subtopics are progressing.
+            </p>
+        </header>
+
+        <div class="subtopic-list">
+
+            {% for subtopic in subtopics %}
+
+                <article class="subtopic-card">
+
+                    <div class="subtopic-info">
+
+                        <p class="subtopic-subject">
+                            {{ subtopic["subject_name"] }}
+                        </p>
+
+                        <p class="subtopic-path">
+                            {{ subtopic["topic_name"] }}
+                            <span aria-hidden="true">→</span>
+                            {{ subtopic["name"] }}
+                        </p>
+
+                    </div>
+
+                    <div class="subtopic-meta">
+
+                        <span class="subtopic-status">
+                            {{ subtopic["status"] }}
+                        </span>
+
+                        <div class="quiz-score">
+
+                            <span class="quiz-score-label">
+                                Latest Quiz
+                            </span>
+
+                            <span class="quiz-score-value">
+                                {{ subtopic["latest_score"] }}%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}
