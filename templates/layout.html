@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- =========================
+         SEO
+    ========================= -->
+
+    <title>
+        {% block title %}StudyVale{% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="{% block meta_description %}StudyVale helps students organize subjects, track study progress, practice with quizzes, and get AI-powered study guidance.{% endblock %}"
+    >
+
+    <meta
+        name="robots"
+        content="{% if session.get('user_id') %}noindex, nofollow{% else %}index, follow{% endif %}"
+    >
+
+    <!-- Canonical URL -->
+
+    {% block canonical %}
+
+    <link
+        rel="canonical"
+        href="{{ request.url }}"
+    >
+
+    {% endblock %}
+
+
+    <!-- =========================
+         OPEN GRAPH
+    ========================= -->
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:title"
+        content="{% block og_title %}StudyVale{% endblock %}"
+    >
+
+    <meta
+        property="og:description"
+        content="{% block og_description %}Organize your studies, track your progress, practice with quizzes, and get AI-powered study guidance.{% endblock %}"
+    >
+
+    <meta
+        property="og:url"
+        content="{{ request.url }}"
+    >
+
+
+    <!-- =========================
+         TWITTER / SOCIAL SHARING
+    ========================= -->
+
+    <meta
+        name="twitter:card"
+        content="summary"
+    >
+
+    <meta
+        name="twitter:title"
+        content="{% block twitter_title %}StudyVale{% endblock %}"
+    >
+
+    <meta
+        name="twitter:description"
+        content="{% block twitter_description %}A simple study companion for organizing subjects, tracking progress, practicing quizzes, and getting AI study guidance.{% endblock %}"
+    >
+
+
+    <!-- =========================
+         APPLICATION INFO
+    ========================= -->
+
+    <meta
+        name="application-name"
+        content="StudyVale"
+    >
+
+    <meta
+        name="theme-color"
+        content="#5b5bd6"
+    >
+
+
+    <style>
+
+        :root {
+            --background: #f7f7f5;
+            --surface: #ffffff;
+            --text: #18181a;
+            --muted: #737373;
+            --border: #e6e6e3;
+
+            --accent: #5b5bd6;
+            --accent-hover: #4f4fc4;
+            --accent-light: #f0f0ff;
+            --accent-border: #dcdcfb;
+
+            --success: #2f8f5b;
+            --success-light: #edf8f1;
+
+            --warning: #b7791f;
+            --warning-light: #fff7e6;
+
+            --info: #3978c7;
+            --info-light: #edf5ff;
+
+            --sidebar-width: 230px;
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            font-size: 15px;
+            line-height: 1.5;
+
+            overflow-x: hidden;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           ACCESSIBILITY
+        ========================= */
+
+        :focus-visible {
+            outline: 3px solid rgba(91, 91, 214, 0.25);
+            outline-offset: 2px;
+        }
+
+
+        /* =========================
+           AUTHENTICATION
+        ========================= */
+
+        .auth-page {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+        }
+
+
+        .auth-container {
+            width: 100%;
+            max-width: 360px;
+        }
+
+
+        .auth-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .auth-brand-mark {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: var(--accent);
+            color: white;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        .auth-brand-name {
+            font-size: 16px;
+            font-weight: 650;
+        }
+
+
+        .auth-container h1 {
+            margin: 0 0 24px;
+
+            font-size: 24px;
+            line-height: 1.2;
+
+            letter-spacing: -0.4px;
+
+            font-weight: 650;
+
+            text-align: left;
+        }
+
+
+        .auth-container form {
+            display: flex;
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .auth-container input {
+            width: 100%;
+            height: 46px;
+
+            padding: 0 13px;
+
+            border: 1px solid #dededb;
+            border-radius: 9px;
+
+            background: white;
+            color: var(--text);
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+
+        .auth-container input::placeholder {
+            color: #a0a0a0;
+        }
+
+
+        .auth-container input:hover {
+            border-color: #cfcfcb;
+        }
+
+
+        .auth-container input:focus {
+            border-color: var(--accent);
+
+            box-shadow:
+                0 0 0 3px var(--accent-light);
+        }
+
+
+        .auth-container button {
+            width: 100%;
+            height: 46px;
+
+            margin-top: 4px;
+
+            border: 0;
+            border-radius: 9px;
+
+            background: var(--accent);
+            color: white;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition:
+                background 0.15s ease,
+                transform 0.1s ease;
+        }
+
+
+        .auth-container button:hover {
+            background: var(--accent-hover);
+        }
+
+
+        .auth-container button:active {
+            transform: scale(0.99);
+        }
+
+
+        /* =========================
+           APP SHELL
+        ========================= */
+
+        .app-shell {
+            height: 0;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            width: var(--sidebar-width);
+
+            padding: 22px 14px;
+
+            background: var(--surface);
+
+            border-right: 1px solid var(--border);
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 8px 10px 24px;
+        }
+
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: var(--accent);
+            color: white;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        .brand-name {
+            font-size: 15px;
+            font-weight: 650;
+
+            letter-spacing: -0.2px;
+        }
+
+
+        .nav-section {
+            margin-top: 10px;
+        }
+
+
+        .nav-label {
+            padding: 0 10px;
+            margin-bottom: 6px;
+
+            color: #a0a0a0;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 0.08em;
+
+            text-transform: uppercase;
+        }
+
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            width: 100%;
+            min-height: 38px;
+
+            padding: 8px 10px;
+            margin-bottom: 2px;
+
+            border-radius: var(--radius-sm);
+
+            color: #555;
+
+            font-size: 14px;
+
+            transition:
+                background 0.15s ease,
+                color 0.15s ease;
+        }
+
+
+        .nav-link:hover {
+            background: var(--accent-light);
+            color: var(--accent-hover);
+        }
+
+
+        .nav-icon {
+            width: 18px;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            color: #777;
+
+            flex-shrink: 0;
+        }
+
+
+        .nav-link:hover .nav-icon {
+            color: var(--accent);
+        }
+
+
+        .sidebar-spacer {
+            flex: 1;
+        }
+
+
+        .mentor-nav {
+            border-top: 1px solid var(--border);
+
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            position: fixed;
+
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+
+            height: 64px;
+
+            background: rgba(247, 247, 245, 0.9);
+
+            border-bottom: 1px solid var(--border);
+
+            backdrop-filter: blur(10px);
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            padding: 0 30px;
+
+            z-index: 900;
+        }
+
+
+        .mentor-top-link {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 7px 11px;
+
+            border: 1px solid var(--accent-border);
+            border-radius: var(--radius-sm);
+
+            background: var(--accent-light);
+
+            color: var(--accent-hover);
+
+            font-size: 13px;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+
+        .mentor-top-link:hover {
+            background: #e8e8ff;
+            border-color: #cfcff5;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+
+            padding-top: 64px;
+
+            min-height: 100vh;
+        }
+
+
+        .app-main {
+            width: min(1100px, calc(100% - 64px));
+
+            margin: 0 auto;
+
+            padding: 20px 0 70px;
+        }
+
+
+        /* =========================
+           TYPOGRAPHY
+        ========================= */
+
+        h1 {
+            margin: 0;
+
+            font-size: 30px;
+            line-height: 1.2;
+
+            letter-spacing: -0.7px;
+
+            font-weight: 700;
+        }
+
+
+        h2 {
+            margin: 0;
+
+            font-size: 20px;
+            line-height: 1.3;
+
+            letter-spacing: -0.3px;
+
+            font-weight: 650;
+        }
+
+
+        h3 {
+            margin: 0;
+
+            font-size: 16px;
+            line-height: 1.4;
+
+            font-weight: 600;
+        }
+
+
+        p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 40px;
+
+            padding: 9px 15px;
+
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+
+            font-size: 14px;
+            font-weight: 600;
+
+            touch-action: manipulation;
+        }
+
+
+        .button-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+
+            color: white;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease,
+                transform 0.1s ease;
+        }
+
+
+        .button-primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+
+        .button-primary:active {
+            transform: scale(0.99);
+        }
+
+
+        .button-secondary {
+            background: var(--surface);
+
+            border-color: var(--border);
+
+            color: var(--text);
+        }
+
+
+        .button-secondary:hover {
+            background: var(--accent-light);
+            border-color: var(--accent-border);
+        }
+
+
+        /* =========================
+           FORM ELEMENTS
+        ========================= */
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+
+            background: var(--surface);
+            color: var(--text);
+
+            padding: 10px 12px;
+
+            outline: none;
+        }
+
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accent);
+
+            box-shadow:
+                0 0 0 3px var(--accent-light);
+        }
+
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            background: var(--surface);
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+
+            padding: 20px;
+        }
+
+
+        /* =========================
+           MOBILE HEADER
+        ========================= */
+
+        .mobile-header {
+            display: none;
+        }
+
+
+        .mobile-menu {
+            display: none;
+        }
+
+
+        /* =========================
+           TABLET / MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar,
+            .topbar {
+                display: none;
+            }
+
+
+            .main-wrapper {
+                margin-left: 0;
+                padding-top: 58px;
+            }
+
+
+            .mobile-header {
+                position: fixed;
+
+                top: 0;
+                left: 0;
+                right: 0;
+
+                height: 58px;
+
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                padding: 0 16px;
+
+                background: rgba(247, 247, 245, 0.94);
+
+                border-bottom: 1px solid var(--border);
+
+                backdrop-filter: blur(10px);
+
+                z-index: 1000;
+            }
+
+
+            .mobile-brand {
+                display: inline-flex;
+                align-items: center;
+
+                min-height: 40px;
+
+                font-size: 15px;
+                font-weight: 650;
+
+                letter-spacing: -0.2px;
+            }
+
+
+            .mobile-menu-button {
+                width: 40px;
+                height: 40px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+
+                background: var(--surface);
+                color: var(--text);
+
+                font-size: 18px;
+                line-height: 1;
+
+                transition:
+                    background 0.15s ease,
+                    border-color 0.15s ease;
+            }
+
+
+            .mobile-menu-button:hover {
+                background: var(--accent-light);
+
+                border-color: var(--accent-border);
+
+                color: var(--accent-hover);
+            }
+
+
+            .mobile-menu-button[aria-expanded="true"] {
+                background: var(--accent-light);
+
+                border-color: var(--accent-border);
+
+                color: var(--accent-hover);
+            }
+
+
+            .mobile-menu {
+                position: fixed;
+
+                top: 58px;
+                left: 0;
+                right: 0;
+
+                background: var(--surface);
+
+                border-bottom: 1px solid var(--border);
+
+                padding: 8px 12px 12px;
+
+                z-index: 999;
+
+                box-shadow:
+                    0 10px 25px rgba(0, 0, 0, 0.06);
+            }
+
+
+            .mobile-menu.open {
+                display: block;
+            }
+
+
+            .mobile-menu .nav-link {
+                min-height: 46px;
+
+                padding: 10px 12px;
+
+                margin-bottom: 2px;
+
+                font-size: 14px;
+            }
+
+
+            .mobile-menu .nav-link:last-child {
+                margin-top: 6px;
+
+                padding-top: 12px;
+
+                border-top: 1px solid var(--border);
+
+                border-radius: 0;
+            }
+
+
+            .app-main {
+                width: calc(100% - 32px);
+
+                padding-top: 30px;
+                padding-bottom: 50px;
+            }
+        }
+
+
+        /* =========================
+           SMALL PHONES
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            body {
+                font-size: 14px;
+            }
+
+
+            .app-main {
+                width: calc(100% - 24px);
+
+                padding-top: 24px;
+                padding-bottom: 40px;
+            }
+
+
+            h1 {
+                font-size: 28px;
+                letter-spacing: -0.5px;
+            }
+
+
+            h2 {
+                font-size: 19px;
+            }
+
+
+            h3 {
+                font-size: 15px;
+            }
+
+
+            .card {
+                padding: 16px;
+
+                border-radius: var(--radius-md);
+            }
+
+
+            .button {
+                min-height: 42px;
+
+                padding: 10px 14px;
+            }
+
+
+            /* Authentication */
+
+            .auth-page {
+                padding: 18px;
+            }
+
+
+            .auth-container {
+                max-width: 100%;
+
+                padding: 28px 22px;
+
+                border-radius: 15px;
+            }
+
+
+            .auth-brand {
+                margin-bottom: 25px;
+            }
+
+
+            .auth-container input,
+            .auth-container button {
+                height: 48px;
+
+                font-size: 15px;
+            }
+        }
+
+
+        /* =========================
+           VERY SMALL PHONES
+        ========================= */
+
+        @media (max-width: 360px) {
+
+            .mobile-header {
+                padding: 0 12px;
+            }
+
+
+            .mobile-brand {
+                font-size: 14px;
+            }
+
+
+            .app-main {
+                width: calc(100% - 20px);
+
+                padding-top: 20px;
+            }
+
+
+            .mobile-menu {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+
+
+        /* =========================
+           REDUCED MOTION
+        ========================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+
+                transition-duration: 0.01ms !important;
+
+                animation-duration: 0.01ms !important;
+
+                animation-iteration-count: 1 !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+{% if session.get("user_id") %}
+
+    <div class="app-shell">
+
+
+        <!-- Desktop Sidebar -->
+
+        <aside class="sidebar">
+
+            <a
+                href="/"
+                class="brand"
+            >
+
+                <span class="brand-mark">
+                    S
+                </span>
+
+                <span class="brand-name">
+                    StudyVale
+                </span>
+
+            </a>
+
+
+            <nav>
+
+                <div class="nav-section">
+
+                    <div class="nav-label">
+                        Study
+                    </div>
+
+
+                    <a
+                        href="/"
+                        class="nav-link"
+                    >
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true"
+                        >
+                            ◉
+                        </span>
+
+                        Dashboard
+
+                    </a>
+
+
+                    <a
+                        href="/subjects"
+                        class="nav-link"
+                    >
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true"
+                        >
+                            ▣
+                        </span>
+
+                        Subjects
+
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-label">
+                        Insights
+                    </div>
+
+
+                    <a
+                        href="/recommendation"
+                        class="nav-link"
+                    >
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true"
+                        >
+                            ✦
+                        </span>
+
+                        Recommendation
+
+                    </a>
+
+
+                    <a
+                        href="/history"
+                        class="nav-link"
+                    >
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true"
+                        >
+                            ◷
+                        </span>
+
+                        Study History
+
+                    </a>
+
+                </div>
+
+
+                <div class="mentor-nav">
+
+                    <div class="nav-label">
+                        Tools
+                    </div>
+
+
+                    <a
+                        href="/mentor"
+                        class="nav-link"
+                    >
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true"
+                        >
+                            ✧
+                        </span>
+
+                        Vale
+
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <div class="sidebar-spacer"></div>
+
+
+            <a
+                href="/logout"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ↪
+                </span>
+
+                Logout
+
+            </a>
+
+
+        </aside>
+
+
+        <!-- Desktop Topbar -->
+
+        <header class="topbar">
+
+            <a
+                href="/mentor"
+                class="mentor-top-link"
+            >
+                ✧ Vale
+            </a>
+
+        </header>
+
+
+        <!-- Mobile Header -->
+
+        <header class="mobile-header">
+
+            <a
+                href="/"
+                class="mobile-brand"
+            >
+                StudyVale
+            </a>
+
+
+            <button
+                type="button"
+                class="mobile-menu-button"
+                id="mobile-menu-button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+                aria-controls="mobile-menu"
+            >
+                ☰
+            </button>
+
+        </header>
+
+
+        <!-- Mobile Navigation -->
+
+        <nav
+            class="mobile-menu"
+            id="mobile-menu"
+            aria-label="Mobile navigation"
+        >
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ◉
+                </span>
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="/subjects"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ▣
+                </span>
+
+                Subjects
+
+            </a>
+
+
+            <a
+                href="/recommendation"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ✦
+                </span>
+
+                Recommendation
+
+            </a>
+
+
+            <a
+                href="/history"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ◷
+                </span>
+
+                Study History
+
+            </a>
+
+
+            <a
+                href="/mentor"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ✧
+                </span>
+
+                Vale
+
+            </a>
+
+
+            <a
+                href="/logout"
+                class="nav-link"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ↪
+                </span>
+
+                Logout
+
+            </a>
+
+        </nav>
+
+
+    </div>
+
+{% endif %}
+
+
+<div
+    class="{% if session.get('user_id') %}main-wrapper{% else %}auth-page{% endif %}"
+>
+
+
+    <div
+        class="{% if session.get('user_id') %}app-main{% else %}auth-container{% endif %}"
+    >
+
+
+        {% if not session.get("user_id") %}
+
+            <div class="auth-brand">
+
+                <span class="auth-brand-mark">
+                    S
+                </span>
+
+                <span class="auth-brand-name">
+                    StudyVale
+                </span>
+
+            </div>
+
+        {% endif %}
+
+
+        {% block main %}{% endblock %}
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const mobileMenuButton =
+        document.getElementById(
+            "mobile-menu-button"
+        );
+
+
+    const mobileMenu =
+        document.getElementById(
+            "mobile-menu"
+        );
+
+
+    if (
+        mobileMenuButton &&
+        mobileMenu
+    ) {
+
+        mobileMenuButton.addEventListener(
+            "click",
+            function() {
+
+                const isOpen =
+                    mobileMenu.classList.toggle("open");
+
+
+                mobileMenuButton.setAttribute(
+                    "aria-expanded",
+                    isOpen
+                );
+
+
+                mobileMenuButton.setAttribute(
+                    "aria-label",
+                    isOpen
+                        ? "Close navigation"
+                        : "Open navigation"
+                );
+
+
+                mobileMenuButton.textContent =
+                    isOpen ? "×" : "☰";
+
+            }
+        );
+
+
+        mobileMenu
+            .querySelectorAll("a")
+            .forEach(function(link) {
+
+                link.addEventListener(
+                    "click",
+                    function() {
+
+                        mobileMenu.classList.remove("open");
+
+
+                        mobileMenuButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+
+                        mobileMenuButton.setAttribute(
+                            "aria-label",
+                            "Open navigation"
+                        );
+
+
+                        mobileMenuButton.textContent =
+                            "☰";
+
+                    }
+                );
+
+            });
+
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Escape" &&
+                    mobileMenu.classList.contains("open")
+                ) {
+
+                    mobileMenu.classList.remove("open");
+
+
+                    mobileMenuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    mobileMenuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation"
+                    );
+
+
+                    mobileMenuButton.textContent =
+                        "☰";
+
+
+                    mobileMenuButton.focus();
+
+                }
+
+            }
+        );
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
